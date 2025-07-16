@@ -47,4 +47,12 @@ public class Joystick implements GInput, GAnalog<Joystick> {
     public Gamepad getGamepad() {
         return this.gamepad;
     }
+
+    public float getX() {
+        return xSupplier.get();
+    }
+
+    public float getY() {
+        return ySupplier.get();
+    }
 }

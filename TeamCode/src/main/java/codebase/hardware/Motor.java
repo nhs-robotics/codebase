@@ -3,12 +3,12 @@ package codebase.hardware;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class Motor {
-    private DcMotorEx motor;
-    private double ticksPerRotation;
+    private final DcMotorEx motor;
+    private final double ticksPerRotation;
     /**
      * Diameter of the wheel measured in inches.
      */
-    private double wheelDiameter;
+    private final double wheelDiameter;
 
     public Motor(DcMotorEx motor, double ticksPerRotation, double wheelDiameter) {
         this.motor = motor;

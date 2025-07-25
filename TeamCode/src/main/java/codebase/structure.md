@@ -11,7 +11,7 @@ The package contains system controllers such as a [Proportional–integral–der
 This package helps interactions with the gamepad by further abstracting the gamepad class.
 
 ## Hardware
-This package contains basic hardware components such as servos.
+This package contains basic hardware components such as motors.
 
 ## Pathing
 This package defines the localization and pathing system. Notably, this package does not interact with the hardware itself.

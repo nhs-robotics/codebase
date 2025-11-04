@@ -2,6 +2,8 @@ package codebase.hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import codebase.sensors.MotorEncoder;
+
 public class Motor {
     private final DcMotorEx motor;
     private final double ticksPerRotation;
@@ -10,10 +12,13 @@ public class Motor {
      */
     private final double wheelDiameter;
 
+    private final MotorEncoder encoder;
+
     public Motor(DcMotorEx motor, double ticksPerRotation, double wheelDiameter) {
         this.motor = motor;
         this.ticksPerRotation = ticksPerRotation;
         this.wheelDiameter = wheelDiameter;
+        this.encoder = new MotorEncoder(motor, ticksPerRotation);
     }
 
     public Motor(DcMotorEx motor) {
@@ -32,6 +37,10 @@ public class Motor {
         double ticksPerSecond = velocity * (ticksPerRotation / (wheelDiameter * Math.PI));
 
         motor.setVelocity(ticksPerSecond);
+    }
+
+    public MotorEncoder getMotorEncoder() {
+        return this.encoder;
     }
 
     /**

@@ -25,6 +25,9 @@ public class SequentialAction implements Action {
     public void loop() {
         if (this.currentActionNode.action.isComplete()) {
             this.currentActionNode = this.currentActionNode.next;
+            if (this.currentActionNode != null) {
+                this.currentActionNode.action.init();
+            }
         }
 
         if (this.currentActionNode == null) {
@@ -32,6 +35,10 @@ public class SequentialAction implements Action {
         }
 
         this.currentActionNode.action.loop();
+    }
+
+    public Action getRunningAction() {
+        return currentActionNode.action;
     }
 }
 

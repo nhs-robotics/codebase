@@ -12,18 +12,18 @@ public class LaunchAction extends SequentialAction {
 
     public LaunchAction() {
         super(
-                new SetServoRotationAction(launchServo, 0.5), // reset launcher servo position
+                new SetServoRotationAction(launchServo, 1), // reset launcher servo position
                 new SimultaneousAction(
                         new SetMotorPowerAction(launchMotor1, 1),
                         new SetMotorPowerAction(launchMotor2, -1)
                 ), // start launch motors
                 new SleepAction(1000), // wait for motors to get up to speed
                 new SetServoRotationAction(launchServo, 0), // push artifact into launcher
-                new SleepAction(250), // wait for ball to launch
+                new SleepAction(1000), // wait for ball to launch
                 new SimultaneousAction(
                         new SetMotorPowerAction(launchMotor1, 0),
                         new SetMotorPowerAction(launchMotor2, 0),
-                        new SetServoRotationAction(launchServo, 0)
+                        new SetServoRotationAction(launchServo, 1)
                 ) // stop launcher motors and reset launch servo
         );
 

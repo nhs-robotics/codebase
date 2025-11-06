@@ -1,11 +1,11 @@
 package codebase.sensors;
 
 public interface Encoder {
-    double getTicks();
+    int getTicks();
 
     /**
-     * Gets the current position of the encoder in inches.
-     * @return position in inches
+     * Gets the current position of the encoder in radians.
+     * @return position in radians
      */
     double getPosition();
 

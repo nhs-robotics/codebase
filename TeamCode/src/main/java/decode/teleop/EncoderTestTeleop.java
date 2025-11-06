@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import codebase.Constants;
 import codebase.hardware.Motor;
 
 @TeleOp(name="Encoder Test Teleop")
@@ -17,7 +18,7 @@ public class EncoderTestTeleop extends OpMode {
 
     @Override
     public void init() {
-        motor = new Motor(hardwareMap.get(DcMotorEx.class, "revolverMotor"));
+        motor = new Motor(hardwareMap.get(DcMotorEx.class, "revolverMotor"), Constants.MotorConstants.GOBILDA_5203_2402_TICKS_PER_ROTATION);
 
         encoderDisplay = telemetry.addData("encoder position", 0);
     }

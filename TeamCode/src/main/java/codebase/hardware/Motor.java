@@ -25,6 +25,10 @@ public class Motor {
         this(motor, 1, 1);
     }
 
+    public Motor(DcMotorEx motor, double ticksPerRotation) {
+        this(motor, ticksPerRotation, 1);
+    }
+
     public void setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior behavior) {
         this.motor.setZeroPowerBehavior(behavior);
     }

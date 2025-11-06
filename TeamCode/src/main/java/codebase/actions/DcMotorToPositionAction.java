@@ -34,7 +34,7 @@ public class DcMotorToPositionAction implements Action {
         this.maxRotationalError = maxRotationalError;
         this.rotationalSpeed = rotationalSpeed;
 
-        pid = new PIDController(pidCoefficients, () -> motor.getMotorEncoder().getPosition(), () -> targetRotation);
+        pid = new PIDController(pidCoefficients, () -> Angles.angleDifference(motor.getMotorEncoder().getPosition(), targetRotation));
     }
 
     @Override

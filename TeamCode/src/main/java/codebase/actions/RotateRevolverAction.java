@@ -7,9 +7,9 @@ import codebase.hardware.Motor;
 public class RotateRevolverAction extends DcMotorToPositionAction {
 
     private static Motor revolverMotor;
-    private static final double MAX_ROTATIONAL_ERROR = Math.PI / 180;
+    private static final double MAX_ROTATIONAL_ERROR = (Math.PI / 180) / 2;
 
-    private static final PIDCoefficients PID_COEFFICIENTS = new PIDCoefficients(0.1, 0, 0);
+    private static final PIDCoefficients PID_COEFFICIENTS = new PIDCoefficients(0.002, 0, 0);
 
     /**
      * @param chamberNumber the chamber number to rotate to (0-2)

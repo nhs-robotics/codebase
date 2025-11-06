@@ -2,6 +2,8 @@ package codebase.sensors;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import codebase.geometry.Angles;
+
 public class MotorEncoder implements Encoder {
     private final DcMotorEx encoder;
     private final double ticksPerRotation;
@@ -12,7 +14,7 @@ public class MotorEncoder implements Encoder {
         this.encoder.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
     }
 
-    public double getTicks() {
+    public int getTicks() {
         return this.encoder.getCurrentPosition();
     }
 
@@ -21,7 +23,7 @@ public class MotorEncoder implements Encoder {
      * @return The position of the encoder in radians.
      */
     public double getPosition() {
-        return (getTicks() / ticksPerRotation) * Math.PI * 2;
+        return Angles.normalizeAngle((getTicks() / ticksPerRotation) * 2.0 * Math.PI);
     }
 
     public void reset() {

@@ -60,15 +60,16 @@ public class SimultaneousAction implements Action {
         if (removeOld) {
             String actionName = action.getClass().getName();
 
-            Action toDelete = null;
+            ArrayList<Action> toDelete = new ArrayList<>();
 
             for (Action a : actions) {
                 if (a.getClass().getName().equals(actionName) && !a.isComplete()) {
-                    toDelete = a;
+                    toDelete.add(a);
                 }
             }
-            if (toDelete != null) {
-                actions.remove(toDelete);
+
+            for (Action a : toDelete) {
+                actions.remove(a);
             }
         }
 

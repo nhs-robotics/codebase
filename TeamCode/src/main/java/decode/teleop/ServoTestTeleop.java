@@ -3,6 +3,9 @@ package decode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ServoImpl;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import codebase.actions.SetServoRotationAction;
 import codebase.actions.SimultaneousAction;
 import codebase.gamepad.Gamepad;
@@ -15,6 +18,8 @@ public class ServoTestTeleop extends OpMode {
 
     private double servoPosition = 0;
 
+    private Telemetry.Item positionDisplay;
+
     @Override
     public void init() {
         launchServo = hardwareMap.get(ServoImpl.class, "launchServo");
@@ -22,14 +27,12 @@ public class ServoTestTeleop extends OpMode {
         gamepad = new Gamepad(gamepad1);
         actionThread = new SimultaneousAction();
 
-        gamepad.dpadRight.onPress(() -> {
-            launchServo.setPosition(0.01);
+        gamepad.rightBumper.onPress(() -> {
             servoPosition += 0.01;
             updateServoPosition();
         });
 
-        gamepad.dpadLeft.onPress(() -> {
-            launchServo.setPosition(0.00);
+        gamepad.leftBumper.onPress(() -> {
             servoPosition -= 0.01;
             updateServoPosition();
         });
@@ -43,9 +46,17 @@ public class ServoTestTeleop extends OpMode {
             servoPosition -= 0.1;
             updateServoPosition();
         });
+
+        positionDisplay = telemetry.addData("Position", servoPosition);
     }
 
     private void updateServoPosition() {
+        if (servoPosition > 1) {
+            servoPosition = 1;
+        }
+        if (servoPosition < 0) {
+            servoPosition = 0;
+        }
         actionThread.add(
                 new SetServoRotationAction(
                         launchServo,
@@ -54,6 +65,8 @@ public class ServoTestTeleop extends OpMode {
                 true,
                 true
         );
+
+        positionDisplay.setValue(servoPosition);
     }
 
     @Override

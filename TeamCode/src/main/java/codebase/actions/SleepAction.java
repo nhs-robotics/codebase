@@ -2,6 +2,7 @@ package codebase.actions;
 
 public class SleepAction implements Action {
 
+    @ActionParameter
     private final long ms;
 
     private long endMs;

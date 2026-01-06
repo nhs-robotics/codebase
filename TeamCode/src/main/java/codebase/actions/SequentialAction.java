@@ -33,20 +33,20 @@ public class SequentialAction implements Action {
 
         this.currentActionNode.action.loop();
     }
-}
 
-class ActionNode {
-    public Action action;
-    public ActionNode next;
+    public static class ActionNode {
+        public Action action;
+        public ActionNode next;
 
-    public ActionNode(Action[] actions) {
-        this.action = actions[0];
+        public ActionNode(Action[] actions) {
+            this.action = actions[0];
 
-        if (actions.length == 1) {
-            this.next = null;
-            return;
+            if (actions.length == 1) {
+                this.next = null;
+                return;
+            }
+
+            this.next = new ActionNode(Arrays.copyOfRange(actions, 1, actions.length));
         }
-
-        this.next = new ActionNode(Arrays.copyOfRange(actions, 1, actions.length));
     }
 }

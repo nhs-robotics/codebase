@@ -1,9 +1,7 @@
 package codebase.geometry;
 
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import androidx.annotation.NonNull;
 
 public class FieldPosition extends Point {
 
@@ -15,5 +13,11 @@ public class FieldPosition extends Point {
     public FieldPosition(double x, double y, double direction) {
         super(x, y);
         this.direction = direction;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.format("(%s, %s), facing %s", this.x, this.y, this.direction);
     }
 }

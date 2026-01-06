@@ -3,6 +3,7 @@ package codebase.actions;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SimultaneousAction implements Action {
 
@@ -57,5 +58,9 @@ public class SimultaneousAction implements Action {
         if (init) {
             action.init();
         }
+    }
+
+    public List<Action> getActions() {
+        return actions;
     }
 }

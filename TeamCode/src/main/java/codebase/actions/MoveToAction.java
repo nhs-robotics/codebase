@@ -16,6 +16,7 @@ public class MoveToAction implements Action {
     private final MecanumDriver driver;
     private final Localizer localizer;
 
+    @ActionParameter
     private final FieldPosition destination;
 
     /**

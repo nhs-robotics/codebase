@@ -21,15 +21,20 @@ public class TelemetryServer extends WebSocketServer implements Loop {
 
     private final OpMode opMode;
     private final List<Field> telemetryDataFields;
+    private final List<Field> robotPositionFields;
 
     public TelemetryServer(OpMode opMode) {
         super(new InetSocketAddress(51631));
         this.opMode = opMode;
         this.telemetryDataFields = new ArrayList<>();
+        this.robotPositionFields = new ArrayList<>();
 
-        for (Field field : opMode.getClass().getFields()) {
+        for (Field field : opMode.getClass().getDeclaredFields()) {
             if (field.isAnnotationPresent(TelemetryData.class)) {
                 this.telemetryDataFields.add(field);
+            }
+            if (field.isAnnotationPresent(RobotPosition.class)) {
+                this.robotPositionFields.add(field);
             }
         }
 
@@ -45,23 +50,35 @@ public class TelemetryServer extends WebSocketServer implements Loop {
     private void sendUpdatePackets() {
         for (Field field : telemetryDataFields) {
             field.setAccessible(true);
-
             try {
-                sendPacketForField(field);
+                sendPacketForField(field, false);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        for (Field field : robotPositionFields) {
+            field.setAccessible(true);
+            try {
+                sendPacketForField(field, true);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
-    private void sendPacketForField(Field field) throws IllegalAccessException {
+    private void sendPacketForField(Field field, boolean isRobotPosition) throws IllegalAccessException {
         Object fieldValue = field.get(this.opMode);
         Class<?> fieldType = field.getType();
 
         TelemetryUpdatePacket packet = new TelemetryUpdatePacket();
         packet.telemetryDataName = field.getName();
 
-        if (fieldType == Double.class || fieldType == Float.class) {
+        if (isRobotPosition && fieldType == FieldPosition.class) {
+            packet.telemetryDataType = TelemetryUpdatePacket.TelemetryDataType.ROBOT_POSITION;
+            if (fieldValue != null) {
+                packet.telemetryDataValue = new TelemetryUpdatePacket.TelemetryFieldPosition((FieldPosition) fieldValue);
+            }
+        } else if (fieldType == Double.class || fieldType == double.class || fieldType == Float.class || fieldType == float.class) {
             packet.telemetryDataType = TelemetryUpdatePacket.TelemetryDataType.DOUBLE;
             packet.telemetryDataValue = fieldValue;
         } else if (fieldType == String.class) {
@@ -69,7 +86,6 @@ public class TelemetryServer extends WebSocketServer implements Loop {
             packet.telemetryDataValue = fieldValue;
         } else if (fieldType == FieldPosition.class) {
             packet.telemetryDataType = TelemetryUpdatePacket.TelemetryDataType.FIELD_POSITION;
-
             if (fieldValue != null) {
                 packet.telemetryDataValue = new TelemetryUpdatePacket.TelemetryFieldPosition((FieldPosition) fieldValue);
             }
@@ -78,7 +94,6 @@ public class TelemetryServer extends WebSocketServer implements Loop {
             packet.telemetryDataValue = new TelemetryUpdatePacket.TelemetryActionQueue((SequentialAction) fieldValue);
         } else {
             packet.telemetryDataType = TelemetryUpdatePacket.TelemetryDataType.STRING;
-
             if (fieldValue != null) {
                 packet.telemetryDataValue = fieldValue.toString();
             }

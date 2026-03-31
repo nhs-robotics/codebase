@@ -1,8 +1,5 @@
 package codebase;
 
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-
-import codebase.geometry.FieldPosition;
 import codebase.hardware.MotorConfig;
 import codebase.movement.mecanum.MecanumCoefficientMatrix;
 import codebase.movement.mecanum.MecanumCoefficientSet;

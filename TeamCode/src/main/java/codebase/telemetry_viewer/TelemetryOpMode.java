@@ -5,14 +5,25 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import codebase.telemetry_viewer.websocket.TelemetryServer;
 
 public abstract class TelemetryOpMode extends OpMode {
-    TelemetryServer telemetryServer;
+    private static TelemetryServer telemetryServer;
 
-    public TelemetryOpMode(OpMode opMode) {
-        this.telemetryServer = new TelemetryServer(opMode);
+    @Override
+    public void init() {
+        if (telemetryServer != null) {
+            try { telemetryServer.stop(); } catch (Exception ignored) {}
+            telemetryServer = null;
+        }
+        telemetryServer = new TelemetryServer(this);
+        telemetryServer.start();
     }
 
     @Override
     public void loop() {
-        this.telemetryServer.loop();
+        TelemetryOpMode.telemetryServer.loop();
+    }
+
+    @Override
+    public void stop() {
+        try { telemetryServer.stop(); } catch (Exception ignored) {}
     }
 }

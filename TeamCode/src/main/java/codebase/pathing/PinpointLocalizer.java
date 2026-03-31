@@ -5,8 +5,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
-import java.lang.reflect.Field;
-
 import codebase.geometry.FieldPosition;
 import codebase.geometry.MovementVector;
 import codebase.hardware.PinpointModule;
@@ -14,8 +12,6 @@ import codebase.hardware.PinpointModule;
 public class PinpointLocalizer implements Localizer {
 
     private final PinpointModule pinpointModule;
-
-    private static FieldPosition lastPosition = new FieldPosition(0, 0, 0);
 
     /**
      *
@@ -47,8 +43,6 @@ public class PinpointLocalizer implements Localizer {
      * @param yPodOffsetFromCenter How far forwards (in mm) from the tracking point the Y (strafe) odometry pod is. forward of center is a positive number, backwards is a negative number
      * @param yDirection The direction the y-pod (strafe) is oriented
      * @param pods The type of pods you are using
-     *
-     *             THIS IS NOT DONE // REVISIT X AND Y AS WE SWITCHED TO FTC FIELD COORDINATE SYSTEM
      */
     public PinpointLocalizer(PinpointModule pinpointModule, double xPodOffsetFromCenter, PinpointModule.EncoderDirection xDirection, double yPodOffsetFromCenter, PinpointModule.EncoderDirection yDirection, PinpointModule.GoBildaOdometryPods pods) {
         this.pinpointModule = pinpointModule;
@@ -70,7 +64,6 @@ public class PinpointLocalizer implements Localizer {
     @Override
     public void init() {
         this.pinpointModule.resetPosAndIMU();
-        PinpointLocalizer.lastPosition = getCurrentPosition();
     }
 
     public MovementVector getVelocity() {
@@ -90,20 +83,12 @@ public class PinpointLocalizer implements Localizer {
     public void loop() {
         try {
             pinpointModule.update();
-            PinpointLocalizer.lastPosition = getCurrentPosition();
         } catch (LynxNackException e) {
+            throw new RuntimeException("PinpointModule update failed", e);
         }
     }
 
     public boolean isDoneInitializing() {
         return pinpointModule.getDeviceStatus() == PinpointModule.DeviceStatus.READY;
-    }
-
-    public static FieldPosition getLastPosition() {
-        return PinpointLocalizer.lastPosition;
-    }
-
-    public static void resetLastPosition() {
-        PinpointLocalizer.lastPosition = new FieldPosition(0, 0, 0);
     }
 }

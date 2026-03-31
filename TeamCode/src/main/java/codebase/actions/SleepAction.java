@@ -4,7 +4,7 @@ public class SleepAction implements Action {
 
     private final long ms;
 
-    private long endMs;
+    private long endMs = Long.MAX_VALUE;
 
     public SleepAction(long ms) {
         this.ms = ms;

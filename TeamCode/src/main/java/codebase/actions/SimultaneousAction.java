@@ -3,6 +3,8 @@ package codebase.actions;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class SimultaneousAction implements Action {
 
@@ -60,7 +62,7 @@ public class SimultaneousAction implements Action {
         ArrayList<Action> toDelete = new ArrayList<>();
 
         for (Action action : actions) {
-            if (action.getClass().equals(type)) {
+            if (type.isInstance(action)) {
                 toDelete.add(action);
             }
         }
@@ -86,7 +88,7 @@ public class SimultaneousAction implements Action {
         this.add(action, init, false);
     }
 
-    public ArrayList<Action> getActions() {
-        return actions;
+    public List<Action> getActions() {
+        return Collections.unmodifiableList(actions);
     }
 }

@@ -2,7 +2,7 @@ package codebase.actions;
 
 public abstract class RunOnceAction implements Action {
 
-    boolean hasRun = false;
+    private boolean hasRun = false;
 
     @Override
     public void loop() {

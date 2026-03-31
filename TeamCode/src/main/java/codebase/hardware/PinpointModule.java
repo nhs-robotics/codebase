@@ -502,7 +502,4 @@ public class PinpointModule extends I2cDeviceSynchDevice<I2cDeviceSynchSimple> {
                 AngleUnit.RADIANS,
                 hVelocity);
     }
-
-
-
 }

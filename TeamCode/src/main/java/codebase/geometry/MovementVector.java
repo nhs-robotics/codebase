@@ -136,7 +136,10 @@ public class MovementVector implements Serializable {
 
         MovementVector that = (MovementVector) o;
 
-        return this.verticalVelocity == that.verticalVelocity && this.horizontalVelocity == that.horizontalVelocity && this.rotationalVelocity == that.rotationalVelocity;
+        double epsilon = 1e-9;
+        return Math.abs(this.verticalVelocity - that.verticalVelocity) < epsilon
+                && Math.abs(this.horizontalVelocity - that.horizontalVelocity) < epsilon
+                && Math.abs(this.rotationalVelocity - that.rotationalVelocity) < epsilon;
     }
 
     @Override

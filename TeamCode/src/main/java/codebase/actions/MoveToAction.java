@@ -60,7 +60,7 @@ public class MoveToAction implements Action {
         double distanceError = Math.sqrt(Math.pow(localizer.getCurrentPosition().x - destination.x, 2) + Math.pow(localizer.getCurrentPosition().y - destination.y, 2));
         double rotationalError = Angles.angleDifference(localizer.getCurrentPosition().direction, destination.direction);
 
-        if ((distanceError <= maxDistanceError) && (rotationalError <= maxRotationalError)) {
+        if ((distanceError <= maxDistanceError) && (Math.abs(rotationalError) <= maxRotationalError)) {
             driver.stop();
             complete = true;
             return;

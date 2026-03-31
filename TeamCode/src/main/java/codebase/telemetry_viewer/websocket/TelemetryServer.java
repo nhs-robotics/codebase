@@ -19,9 +19,19 @@ import codebase.telemetry_viewer.websocket.packets.TelemetryUpdatePacket;
 
 public class TelemetryServer extends WebSocketServer implements Loop {
 
+    private static class FieldTarget {
+        final Object owner;
+        final Field field;
+
+        FieldTarget(Object owner, Field field) {
+            this.owner = owner;
+            this.field = field;
+        }
+    }
+
     private final OpMode opMode;
-    private final List<Field> telemetryDataFields;
-    private final List<Field> robotPositionFields;
+    private final List<FieldTarget> telemetryDataFields;
+    private final List<FieldTarget> robotPositionFields;
 
     public TelemetryServer(OpMode opMode) {
         super(new InetSocketAddress(51631));
@@ -29,17 +39,35 @@ public class TelemetryServer extends WebSocketServer implements Loop {
         this.telemetryDataFields = new ArrayList<>();
         this.robotPositionFields = new ArrayList<>();
 
-        for (Field field : opMode.getClass().getDeclaredFields()) {
-            if (field.isAnnotationPresent(TelemetryData.class)) {
-                this.telemetryDataFields.add(field);
-            }
-            if (field.isAnnotationPresent(RobotPosition.class)) {
-                this.robotPositionFields.add(field);
-            }
-        }
+        scanObject(opMode);
 
         this.setReuseAddr(true);
         this.setTcpNoDelay(true);
+    }
+
+    private void scanObject(Object obj) {
+        if (obj == null) return;
+
+        for (Field field : obj.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+
+            if (field.isAnnotationPresent(TelemetryData.class)) {
+                telemetryDataFields.add(new FieldTarget(obj, field));
+            }
+            if (field.isAnnotationPresent(RobotPosition.class)) {
+                robotPositionFields.add(new FieldTarget(obj, field));
+            }
+            if (field.isAnnotationPresent(TelemetryObject.class)) {
+                try {
+                    Object nested = field.get(obj);
+                    if (nested != null) {
+                        scanObject(nested);
+                    }
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
     }
 
     @Override
@@ -48,30 +76,29 @@ public class TelemetryServer extends WebSocketServer implements Loop {
     }
 
     private void sendUpdatePackets() {
-        for (Field field : telemetryDataFields) {
-            field.setAccessible(true);
+        for (FieldTarget target : telemetryDataFields) {
             try {
-                sendPacketForField(field, false);
+                sendPacketForField(target, false);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
         }
-        for (Field field : robotPositionFields) {
-            field.setAccessible(true);
+        for (FieldTarget target : robotPositionFields) {
             try {
-                sendPacketForField(field, true);
+                sendPacketForField(target, true);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
-    private void sendPacketForField(Field field, boolean isRobotPosition) throws IllegalAccessException {
-        Object fieldValue = field.get(this.opMode);
-        Class<?> fieldType = field.getType();
+    private void sendPacketForField(FieldTarget target, boolean isRobotPosition) throws IllegalAccessException {
+        target.field.setAccessible(true);
+        Object fieldValue = target.field.get(target.owner);
+        Class<?> fieldType = target.field.getType();
 
         TelemetryUpdatePacket packet = new TelemetryUpdatePacket();
-        packet.telemetryDataName = field.getName();
+        packet.telemetryDataName = target.field.getName();
 
         if (isRobotPosition && fieldType == FieldPosition.class) {
             packet.telemetryDataType = TelemetryUpdatePacket.TelemetryDataType.ROBOT_POSITION;

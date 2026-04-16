@@ -12,12 +12,11 @@ import java.util.List;
 import java.util.Locale;
 
 import codebase.gamepad.Gamepad;
-import codebase.hardware.Motor;
 
 @TeleOp(name="Motor Test Teleop")
 public class MotorTestTeleop extends OpMode {
     private Gamepad gamepad;
-    private final List<Motor> motors = new ArrayList<>();
+    private final List<DcMotorEx> motors = new ArrayList<>();
 
 
     private Telemetry.Item currentMotorIndexTelemetry;
@@ -33,7 +32,7 @@ public class MotorTestTeleop extends OpMode {
     public void init() {
         for (DcMotorEx motor : hardwareMap.getAll(DcMotorEx.class)) {
             motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motors.add(new Motor(motor));
+            motors.add(motor);
         }
 
         if (motors.isEmpty()) {
@@ -64,7 +63,7 @@ public class MotorTestTeleop extends OpMode {
     }
 
     private String getSelectedMotorOutput() {
-        return currentMotorIndex + ": " + hardwareMap.getNamesOf(motors.get(currentMotorIndex).getMotor()).iterator().next();
+        return currentMotorIndex + ": " + hardwareMap.getNamesOf(motors.get(currentMotorIndex)).iterator().next();
     }
     private String getCurrentPowerOrVelocityTargetOutput() {
         if (velocityMode) {
@@ -78,6 +77,7 @@ public class MotorTestTeleop extends OpMode {
     public void loop() {
         gamepad.loop();
         currentMotorIndexTelemetry.setValue(getSelectedMotorOutput());
+        motorPowerOrVelocityTargetTelemetry.setValue(getCurrentPowerOrVelocityTargetOutput());
         motorModeTelemetry.setValue("Mode", velocityMode ? "Velocity" : "Power");
 
         if (velocityMode) {

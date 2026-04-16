@@ -3,7 +3,7 @@ package codebase;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import com.qualcomm.robotcore.hardware.ServoImpl;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -15,7 +15,7 @@ import codebase.gamepad.Gamepad;
 @TeleOp(name="Servo Test Teleop")
 public class ServoTestTeleop extends OpMode {
     private Gamepad gamepad;
-    private final List<ServoImpl> servos = new ArrayList<>();
+    private final List<Servo> servos = new ArrayList<>();
 
 
     private Telemetry.Item currentServoTelemetry;
@@ -27,43 +27,31 @@ public class ServoTestTeleop extends OpMode {
 
     @Override
     public void init() {
-        for (ServoImpl servo : hardwareMap.getAll(ServoImpl.class)) {
-            servos.add(servo);
-        }
+        servos.addAll(hardwareMap.getAll(Servo.class));
 
         if (servos.isEmpty()) {
             throw new IllegalStateException("No servos found :(");
         }
 
+        currentServoPosition = servos.get(currentServoIndex).getPosition();
+
         gamepad = new Gamepad(gamepad1);
 
-        gamepad.xButton.onPress(() -> {
-            updateServoIndex(true);
-        });
-        gamepad.bButton.onPress(() -> {
-            updateServoIndex(false);
-        });
+        gamepad.xButton.onPress(() -> updateServoIndex(true));
+        gamepad.bButton.onPress(() -> updateServoIndex(false));
 
-        gamepad.rightTrigger.onPress(() -> {
-            updateServoPosition(0.1);
-        });
+        gamepad.rightTrigger.onPress(() -> updateServoPosition(0.1));
 
-        gamepad.leftTrigger.onPress(() -> {
-            updateServoPosition(-0.1);
-        });
+        gamepad.leftTrigger.onPress(() -> updateServoPosition(-0.1));
 
-        gamepad.rightBumper.onPress(() -> {
-            updateServoPosition(0.01);
-        });
+        gamepad.rightBumper.onPress(() -> updateServoPosition(0.01));
 
-        gamepad.leftBumper.onPress(() -> {
-            updateServoPosition(-0.01);
-        });
+        gamepad.leftBumper.onPress(() -> updateServoPosition(-0.01));
 
         telemetry.addLine("--- Servo Test Controls ---");
         telemetry.addLine("X/B: prev/next servo");
-        telemetry.addLine("Left/Right Trigger: -/+ position by 0.01");
-        telemetry.addLine("Left/Right Bumper: -/+ position by 0.1");
+        telemetry.addLine("Left/Right Trigger: -/+ position by 0.1");
+        telemetry.addLine("Left/Right Bumper: -/+ position by 0.01");
         telemetry.addLine("---------------------------");
 
         currentServoTelemetry = telemetry.addData("Current Servo", getSelectedServoOutput());

@@ -41,9 +41,17 @@ public class MotorTestTeleop extends OpMode {
 
         gamepad = new Gamepad(gamepad1);
 
-        gamepad.xButton.onPress(() -> currentMotorIndex = (currentMotorIndex - 1 + motors.size()) % motors.size());
+        gamepad.xButton.onPress(() -> {
+            motors.get(currentMotorIndex).setPower(0);
+            targetVelocityTicksPerSecond = 0;
+            currentMotorIndex = (currentMotorIndex - 1 + motors.size()) % motors.size();
+        });
+        gamepad.bButton.onPress(() -> {
+            motors.get(currentMotorIndex).setPower(0);
+            targetVelocityTicksPerSecond = 0;
+            currentMotorIndex = (currentMotorIndex + 1) % motors.size();
+        });
 
-        gamepad.bButton.onPress(() -> currentMotorIndex = (currentMotorIndex + 1) % motors.size());
         gamepad.yButton.onPress(() -> velocityMode = !velocityMode);
 
         gamepad.dpadLeft.onPress(() -> targetVelocityTicksPerSecond -= 50);
@@ -78,12 +86,17 @@ public class MotorTestTeleop extends OpMode {
         gamepad.loop();
         currentMotorIndexTelemetry.setValue(getSelectedMotorOutput());
         motorPowerOrVelocityTargetTelemetry.setValue(getCurrentPowerOrVelocityTargetOutput());
-        motorModeTelemetry.setValue("Mode", velocityMode ? "Velocity" : "Power");
+        motorModeTelemetry.setValue(velocityMode ? "Velocity" : "Power");
 
         if (velocityMode) {
             motors.get(currentMotorIndex).setVelocity(targetVelocityTicksPerSecond);
         } else {
             motors.get(currentMotorIndex).setPower(gamepad.rightJoystick.getY());
         }
+    }
+
+    @Override
+    public void stop() {
+        for (DcMotorEx motor : motors) motor.setPower(0);
     }
 }

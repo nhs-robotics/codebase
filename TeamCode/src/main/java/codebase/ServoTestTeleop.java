@@ -7,18 +7,18 @@ import com.qualcomm.robotcore.hardware.ServoImpl;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import codebase.gamepad.Gamepad;
 
 @TeleOp(name="Servo Test Teleop")
 public class ServoTestTeleop extends OpMode {
     private Gamepad gamepad;
-    private List<ServoImpl> servos;
+    private final List<ServoImpl> servos = new ArrayList<>();
 
 
-    private Telemetry.Item currentServoIndexTelemetry;
+    private Telemetry.Item currentServoTelemetry;
     private Telemetry.Item currentServoPositionTelemetry;
 
     private int currentServoIndex = 0;
@@ -35,8 +35,14 @@ public class ServoTestTeleop extends OpMode {
             throw new IllegalStateException("No servos found :(");
         }
 
-        gamepad.xButton.onPress(() -> currentServoIndex = (currentServoIndex - 1 + servos.size()) % servos.size());
-        gamepad.bButton.onPress(() -> currentServoIndex = (currentServoIndex + 1) % servos.size());
+        gamepad = new Gamepad(gamepad1);
+
+        gamepad.xButton.onPress(() -> {
+            updateServoIndex(true);
+        });
+        gamepad.bButton.onPress(() -> {
+            updateServoIndex(false);
+        });
 
         gamepad.rightTrigger.onPress(() -> {
             updateServoPosition(0.1);
@@ -60,19 +66,32 @@ public class ServoTestTeleop extends OpMode {
         telemetry.addLine("Left/Right Bumper: -/+ position by 0.1");
         telemetry.addLine("---------------------------");
 
-        currentServoIndexTelemetry = telemetry.addData("Current Index", currentServoIndex);
+        currentServoTelemetry = telemetry.addData("Current Servo", getSelectedServoOutput());
         currentServoPositionTelemetry = telemetry.addData("Current Position", currentServoPosition);
+    }
 
+    private void updateServoIndex(boolean decrease) {
+        if (decrease) {
+            currentServoIndex = (currentServoIndex - 1 + servos.size()) % servos.size();
+        } else {
+            currentServoIndex = (currentServoIndex + 1) % servos.size();
+        }
+        currentServoPosition = servos.get(currentServoIndex).getPosition();
     }
 
     private void updateServoPosition(double increaseBy) {
         currentServoPosition = Math.max(0, Math.min(1, currentServoPosition + increaseBy));
+        servos.get(currentServoIndex).setPosition(currentServoPosition);
+    }
+
+    private String getSelectedServoOutput() {
+        return currentServoIndex + ": " + hardwareMap.getNamesOf(servos.get(currentServoIndex)).iterator().next();
     }
 
     @Override
     public void loop() {
         gamepad.loop();
-        currentServoIndexTelemetry.setValue(currentServoIndex);
+        currentServoTelemetry.setValue(getSelectedServoOutput());
         currentServoPositionTelemetry.setValue(currentServoPosition);
     }
 }

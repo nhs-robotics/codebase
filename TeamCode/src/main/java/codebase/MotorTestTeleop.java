@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -16,7 +17,7 @@ import codebase.hardware.Motor;
 @TeleOp(name="Motor Test Teleop")
 public class MotorTestTeleop extends OpMode {
     private Gamepad gamepad;
-    private List<Motor> motors;
+    private final List<Motor> motors = new ArrayList<>();
 
 
     private Telemetry.Item currentMotorIndexTelemetry;
@@ -39,6 +40,8 @@ public class MotorTestTeleop extends OpMode {
             throw new IllegalStateException("No motors found :(");
         }
 
+        gamepad = new Gamepad(gamepad1);
+
         gamepad.xButton.onPress(() -> currentMotorIndex = (currentMotorIndex - 1 + motors.size()) % motors.size());
 
         gamepad.bButton.onPress(() -> currentMotorIndex = (currentMotorIndex + 1) % motors.size());
@@ -55,11 +58,14 @@ public class MotorTestTeleop extends OpMode {
         telemetry.addLine("Right Stick Y: set power (If in Power mode)");
         telemetry.addLine("---------------------------");
 
-        currentMotorIndexTelemetry = telemetry.addData("Current Index", currentMotorIndex);
+        currentMotorIndexTelemetry = telemetry.addData("Current Motor", getSelectedMotorOutput());
         motorModeTelemetry = telemetry.addData("Mode", velocityMode ? "Velocity" : "Power");
         motorPowerOrVelocityTargetTelemetry = telemetry.addData("", getCurrentPowerOrVelocityTargetOutput());
     }
 
+    private String getSelectedMotorOutput() {
+        return currentMotorIndex + ": " + hardwareMap.getNamesOf(motors.get(currentMotorIndex).getMotor()).iterator().next();
+    }
     private String getCurrentPowerOrVelocityTargetOutput() {
         if (velocityMode) {
             return String.format(Locale.US, "Target Velocity: %.2f, Current Velocity: %.2f", targetVelocityTicksPerSecond, motors.get(currentMotorIndex).getVelocity());
@@ -71,7 +77,7 @@ public class MotorTestTeleop extends OpMode {
     @Override
     public void loop() {
         gamepad.loop();
-        currentMotorIndexTelemetry.setValue(currentMotorIndex);
+        currentMotorIndexTelemetry.setValue(getSelectedMotorOutput());
         motorModeTelemetry.setValue("Mode", velocityMode ? "Velocity" : "Power");
 
         if (velocityMode) {

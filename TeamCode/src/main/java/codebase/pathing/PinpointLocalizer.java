@@ -1,5 +1,7 @@
 package codebase.pathing;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.hardware.lynx.LynxNackException;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -25,7 +27,7 @@ public class PinpointLocalizer implements Localizer {
      * @param yDirection The direction the y-pod (strafe) is oriented
      * @param encoderResolution The number of ticks per mm of the encoders attached to the PinPoint
      */
-    public PinpointLocalizer(PinpointModule pinpointModule, double xPodOffsetFromCenter, PinpointModule.EncoderDirection xDirection, double yPodOffsetFromCenter, PinpointModule.EncoderDirection yDirection, double encoderResolution) {
+    public PinpointLocalizer(@NonNull PinpointModule pinpointModule, double xPodOffsetFromCenter, @NonNull PinpointModule.EncoderDirection xDirection, double yPodOffsetFromCenter, @NonNull PinpointModule.EncoderDirection yDirection, double encoderResolution) {
         this.pinpointModule = pinpointModule;
         this.pinpointModule.setEncoderResolution(encoderResolution);
         this.pinpointModule.setOffsets(xPodOffsetFromCenter,yPodOffsetFromCenter);
@@ -44,7 +46,7 @@ public class PinpointLocalizer implements Localizer {
      * @param yDirection The direction the y-pod (strafe) is oriented
      * @param pods The type of pods you are using
      */
-    public PinpointLocalizer(PinpointModule pinpointModule, double xPodOffsetFromCenter, PinpointModule.EncoderDirection xDirection, double yPodOffsetFromCenter, PinpointModule.EncoderDirection yDirection, PinpointModule.GoBildaOdometryPods pods) {
+    public PinpointLocalizer(@NonNull PinpointModule pinpointModule, double xPodOffsetFromCenter, @NonNull PinpointModule.EncoderDirection xDirection, double yPodOffsetFromCenter, @NonNull PinpointModule.EncoderDirection yDirection, @NonNull PinpointModule.GoBildaOdometryPods pods) {
         this.pinpointModule = pinpointModule;
         this.pinpointModule.setEncoderResolution(pods);
         this.pinpointModule.setOffsets(xPodOffsetFromCenter,yPodOffsetFromCenter);

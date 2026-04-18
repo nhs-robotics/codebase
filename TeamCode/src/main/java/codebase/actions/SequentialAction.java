@@ -1,5 +1,7 @@
 package codebase.actions;
 
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,7 +54,8 @@ public class SequentialAction implements Action {
         actions.get(currentIndex).loop();
     }
 
-    public Action getRunningAction() {
+    @Nullable
+    public Action getActions() {
         if (isComplete()) {
             return null;
         }

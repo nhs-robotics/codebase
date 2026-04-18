@@ -1,5 +1,7 @@
 package codebase.actions;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
@@ -30,7 +32,7 @@ public class DcMotorToPositionAction implements Action {
      * @param maxRotationalError max error, in radians, to be considered complete
      * @param pidCoefficients the coefficients for the rotational PID
      */
-    public DcMotorToPositionAction(Motor motor, double targetRotation, double rotationalSpeed, double maxRotationalError, PIDCoefficients pidCoefficients) {
+    public DcMotorToPositionAction(@NonNull Motor motor, double targetRotation, double rotationalSpeed, double maxRotationalError, @NonNull PIDCoefficients pidCoefficients) {
         this.motor = motor;
         this.targetRotation = () -> targetRotation;
         this.maxRotationalError = maxRotationalError;
@@ -46,7 +48,7 @@ public class DcMotorToPositionAction implements Action {
      * @param maxRotationalError max error, in radians, to be considered complete
      * @param pidCoefficients the coefficients for the rotational PID
      */
-    public DcMotorToPositionAction(Motor motor, Supplier<Double> targetRotation, double rotationalSpeed, double maxRotationalError, PIDCoefficients pidCoefficients) {
+    public DcMotorToPositionAction(@NonNull Motor motor, @NonNull Supplier<Double> targetRotation, double rotationalSpeed, double maxRotationalError, @NonNull PIDCoefficients pidCoefficients) {
         this.motor = motor;
         this.targetRotation = targetRotation;
         this.maxRotationalError = maxRotationalError;

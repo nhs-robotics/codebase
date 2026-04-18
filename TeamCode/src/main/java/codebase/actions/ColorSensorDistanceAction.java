@@ -1,5 +1,7 @@
 package codebase.actions;
 
+import androidx.annotation.NonNull;
+
 import codebase.sensors.ColorSensor;
 
 public class ColorSensorDistanceAction implements Action {
@@ -8,7 +10,7 @@ public class ColorSensorDistanceAction implements Action {
     private final double triggerDistance;
     private final DistanceMode mode;
 
-    public ColorSensorDistanceAction(ColorSensor colorSensor, double triggerDistance, DistanceMode mode) {
+    public ColorSensorDistanceAction(@NonNull ColorSensor colorSensor, double triggerDistance, @NonNull DistanceMode mode) {
         this.colorSensor = colorSensor;
         this.triggerDistance = triggerDistance;
         this.mode = mode;

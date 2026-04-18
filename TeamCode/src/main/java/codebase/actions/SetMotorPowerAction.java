@@ -1,5 +1,7 @@
 package codebase.actions;
 
+import androidx.annotation.NonNull;
+
 import codebase.hardware.Motor;
 
 public class SetMotorPowerAction extends RunOnceAction {
@@ -7,7 +9,7 @@ public class SetMotorPowerAction extends RunOnceAction {
     private final Motor motor;
     private final double power;
 
-    public SetMotorPowerAction(Motor motor, double power) {
+    public SetMotorPowerAction(@NonNull Motor motor, double power) {
         this.motor = motor;
         this.power = power;
     }

@@ -1,5 +1,7 @@
 package codebase.sensors;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import codebase.geometry.Angles;
@@ -8,7 +10,7 @@ public class MotorEncoder implements Encoder {
     private final DcMotorEx encoder;
     private final double ticksPerRotation;
 
-    public MotorEncoder(DcMotorEx encoder, double ticksPerRotation) {
+    public MotorEncoder(@NonNull DcMotorEx encoder, double ticksPerRotation) {
         this.encoder = encoder;
         this.ticksPerRotation = ticksPerRotation;
         this.encoder.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);

@@ -1,6 +1,7 @@
 package codebase.actions;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -88,6 +89,7 @@ public class SimultaneousAction implements Action {
         this.add(action, init, false);
     }
 
+    @Nullable
     public List<Action> getActions() {
         return Collections.unmodifiableList(actions);
     }

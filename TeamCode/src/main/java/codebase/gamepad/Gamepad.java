@@ -1,5 +1,7 @@
 package codebase.gamepad;
 
+import androidx.annotation.NonNull;
+
 import codebase.Loop;
 import codebase.gamepad.input.types.Button;
 import codebase.gamepad.input.types.Joystick;
@@ -29,7 +31,7 @@ public class Gamepad implements Loop {
     public final Trigger leftTrigger;
     public final Trigger rightTrigger;
 
-    public Gamepad(com.qualcomm.robotcore.hardware.Gamepad gamepad) {
+    public Gamepad(@NonNull com.qualcomm.robotcore.hardware.Gamepad gamepad) {
         this.xButton = new Button(this, () -> gamepad.x);
         this.yButton = new Button(this, () -> gamepad.y);
         this.aButton = new Button(this, () -> gamepad.a);

@@ -1,5 +1,7 @@
 package codebase.movement.mecanum;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import codebase.geometry.FieldPosition;
@@ -33,11 +35,11 @@ public class MecanumDriver {
      * @param maxWheelVelocity Maximum wheel velocity in inches per second.
      */
     public MecanumDriver(
-            Motor fl,
-            Motor fr,
-            Motor bl,
-            Motor br,
-            MecanumCoefficientMatrix mecanumDriveCoefficients,
+            @NonNull Motor fl,
+            @NonNull Motor fr,
+            @NonNull Motor bl,
+            @NonNull Motor br,
+            @NonNull MecanumCoefficientMatrix mecanumDriveCoefficients,
             double maxWheelVelocity
     ) {
         this.fl = fl;
@@ -63,11 +65,11 @@ public class MecanumDriver {
      * @param mecanumDriveCoefficients Coefficient matrix for drive adjustments.
      */
     public MecanumDriver(
-            Motor fl,
-            Motor fr,
-            Motor bl,
-            Motor br,
-            MecanumCoefficientMatrix mecanumDriveCoefficients
+            @NonNull Motor fl,
+            @NonNull Motor fr,
+            @NonNull Motor bl,
+            @NonNull Motor br,
+            @NonNull MecanumCoefficientMatrix mecanumDriveCoefficients
     ) {
         this(fl, fr, bl, br, mecanumDriveCoefficients, -1);
     }

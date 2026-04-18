@@ -1,5 +1,7 @@
 package codebase.actions;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class SetServoRotationAction extends RunOnceAction {
@@ -11,7 +13,7 @@ public class SetServoRotationAction extends RunOnceAction {
      * @param servo the servo to set the position of
      * @param position the target position in the range [0.0, 1.0]
      */
-    public SetServoRotationAction(Servo servo, double position) {
+    public SetServoRotationAction(@NonNull Servo servo, double position) {
         this.servo = servo;
         this.position = position;
     }

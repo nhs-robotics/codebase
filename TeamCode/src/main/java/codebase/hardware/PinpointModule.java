@@ -2,6 +2,8 @@ package codebase.hardware;
 
 import static com.qualcomm.robotcore.util.TypeConversion.byteArrayToInt;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.hardware.lynx.LynxI2cDeviceSynch;
 import com.qualcomm.hardware.lynx.LynxNackException;
 import com.qualcomm.robotcore.hardware.I2cAddr;
@@ -47,7 +49,7 @@ public class PinpointModule extends I2cDeviceSynchDevice<I2cDeviceSynchSimple> {
     /**
      * Proper way to initialize: hardwareMap.get(GoBildaPinpointDriver.class,"PinPoint");
      */
-    public PinpointModule(I2cDeviceSynchSimple deviceClient, boolean deviceClientIsOwned) {
+    public PinpointModule(@NonNull I2cDeviceSynchSimple deviceClient, boolean deviceClientIsOwned) {
         super(deviceClient, deviceClientIsOwned);
 
         this.deviceClient.setI2cAddress(I2cAddr.create7bit(DEFAULT_ADDRESS));

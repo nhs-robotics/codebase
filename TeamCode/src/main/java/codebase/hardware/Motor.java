@@ -1,5 +1,7 @@
 package codebase.hardware;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -17,7 +19,7 @@ public class Motor {
 
     private final boolean velocityConfigured;
 
-    public Motor(DcMotorEx motor, double ticksPerRotation, double wheelDiameter, boolean runUsingEncoder) {
+    public Motor(@NonNull DcMotorEx motor, double ticksPerRotation, double wheelDiameter, boolean runUsingEncoder) {
         this.motor = motor;
         this.ticksPerRotation = ticksPerRotation;
         this.wheelDiameter = wheelDiameter;
@@ -29,11 +31,11 @@ public class Motor {
         }
     }
 
-    public Motor(DcMotorEx motor, MotorConfig config) {
+    public Motor(@NonNull DcMotorEx motor, @NonNull MotorConfig config) {
         this(motor, config.ticksPerRotation, config.wheelDiameter, true);
     }
 
-    public Motor(DcMotorEx motor) {
+    public Motor(@NonNull DcMotorEx motor) {
         this.motor = motor;
         this.ticksPerRotation = 1;
         this.wheelDiameter = 1;

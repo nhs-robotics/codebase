@@ -1,5 +1,7 @@
 package codebase.controllers;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
 import java.util.function.Supplier;
@@ -14,11 +16,11 @@ public class PIDController implements Controller {
     private double lastTime = 0;
     private double lastDerivative = 0;
 
-    public PIDController(PIDCoefficients coefficients, Supplier<Double> currentPositionSupplier, Supplier<Double> targetPositionSupplier) {
+    public PIDController(@NonNull PIDCoefficients coefficients, @NonNull Supplier<Double> currentPositionSupplier, @NonNull Supplier<Double> targetPositionSupplier) {
         this(coefficients, () -> targetPositionSupplier.get() - currentPositionSupplier.get());
     }
 
-    public PIDController(PIDCoefficients coefficients, Supplier<Double> errorSupplier) {
+    public PIDController(@NonNull PIDCoefficients coefficients, @NonNull Supplier<Double> errorSupplier) {
         this.coefficients = coefficients;
         this.errorSupplier = errorSupplier;
     }

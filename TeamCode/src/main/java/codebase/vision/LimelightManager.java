@@ -1,5 +1,7 @@
 package codebase.vision;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 
@@ -14,7 +16,7 @@ public class LimelightManager {
 
     private int currentPipelineIndex = 0;
 
-    public LimelightManager(Limelight3A limelight) {
+    public LimelightManager(@NonNull Limelight3A limelight) {
         this.limelight = limelight;
     }
 

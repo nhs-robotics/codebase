@@ -1,5 +1,7 @@
 package codebase.actions;
 
+import androidx.annotation.NonNull;
+
 import codebase.Constants;
 import codebase.controllers.Controller;
 import codebase.controllers.SigmoidController;
@@ -32,7 +34,7 @@ public class MoveToAction implements Action {
     private final Controller yController;
     private final Controller directionController;
 
-    public MoveToAction(MecanumDriver driver, Localizer localizer, FieldPosition destination, double movementSpeedMultiplier, double rotationalSpeedMultiplier, double maxDistanceError, double maxRotationalError) {
+    public MoveToAction(@NonNull MecanumDriver driver, @NonNull Localizer localizer, @NonNull FieldPosition destination, double movementSpeedMultiplier, double rotationalSpeedMultiplier, double maxDistanceError, double maxRotationalError) {
         this.driver = driver;
         this.localizer = localizer;
         this.destination = destination;
